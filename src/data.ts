@@ -88,6 +88,7 @@ export const membres: Membre[] = [
 ];
 
 export const objectifs: Objectif[] = [
+  // Company Level Objectives
   {
     id: 1,
     titre: 'Expansion Lagos Tech Hub',
@@ -95,7 +96,8 @@ export const objectifs: Objectif[] = [
     dateEcheance: '2024-06-30',
     progression: 65,
     responsable: 1,
-    statut: 'en_cours'
+    statut: 'en_cours',
+    level: 'company'
   },
   {
     id: 2,
@@ -104,25 +106,58 @@ export const objectifs: Objectif[] = [
     dateEcheance: '2024-03-31',
     progression: 85,
     responsable: 3,
-    statut: 'en_cours'
+    statut: 'en_cours',
+    level: 'company'
   },
+  // Department Level Objectives (Marketing)
   {
     id: 3,
-    titre: 'Digitalisation PME',
-    description: 'Accompagner 100 PME dans leur transformation digitale',
+    titre: 'Stratégie Marketing Digital',
+    description: 'Développer une stratégie marketing digital complète',
     dateEcheance: '2024-04-15',
-    progression: 100,
+    progression: 70,
     responsable: 2,
-    statut: 'complete'
+    statut: 'en_cours',
+    level: 'department',
+    parentId: 1,
+    equipe: 'Marketing'
   },
+  // Individual Level Objectives
   {
     id: 4,
-    titre: 'Innovation FinTech',
-    description: 'Lancer notre solution de paiement mobile',
-    dateEcheance: '2024-08-30',
+    titre: 'Campagne Réseaux Sociaux',
+    description: 'Créer et exécuter une campagne sur les réseaux sociaux',
+    dateEcheance: '2024-03-30',
+    progression: 60,
+    responsable: 10,
+    statut: 'en_cours',
+    level: 'individual',
+    parentId: 3
+  },
+  // Department Level Objectives (Development)
+  {
+    id: 5,
+    titre: 'Infrastructure Tech Hub',
+    description: 'Mettre en place l\'infrastructure technique du hub',
+    dateEcheance: '2024-05-30',
     progression: 40,
-    responsable: 7,
-    statut: 'en_cours'
+    responsable: 5,
+    statut: 'en_cours',
+    level: 'department',
+    parentId: 1,
+    equipe: 'Développement'
+  },
+  // Individual Level Objectives
+  {
+    id: 6,
+    titre: 'Architecture Cloud',
+    description: 'Concevoir l\'architecture cloud pour le hub',
+    dateEcheance: '2024-04-30',
+    progression: 35,
+    responsable: 12,
+    statut: 'en_cours',
+    level: 'individual',
+    parentId: 5
   }
 ];
 

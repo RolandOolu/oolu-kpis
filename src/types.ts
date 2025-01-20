@@ -6,6 +6,8 @@ export interface Membre {
   equipe: string;
 }
 
+export type ObjectiveLevel = 'company' | 'department' | 'individual';
+
 export interface Objectif {
   id: number;
   titre: string;
@@ -14,6 +16,9 @@ export interface Objectif {
   progression: number;
   responsable: number;
   statut: 'en_cours' | 'complete' | 'en_retard';
+  level: ObjectiveLevel;
+  parentId?: number; // Reference to parent objective
+  equipe?: string; // For department level objectives
 }
 
 export interface KPI {
