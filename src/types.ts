@@ -1,24 +1,24 @@
 export interface Membre {
-  id: number;
+  id: string;
   nom: string;
   poste: string;
   photo: string;
   equipe: string;
+  email: string;
+  phone?: string;
+  uid?: string;
+  createdAt?: string;
+  updatedAt?: string;
 }
 
-export type ObjectiveLevel = 'company' | 'department' | 'individual';
-
-export interface Objectif {
-  id: number;
-  titre: string;
-  description: string;
-  dateEcheance: string;
-  progression: number;
-  responsable: number;
-  statut: 'en_cours' | 'complete' | 'en_retard';
-  level: ObjectiveLevel;
-  parentId?: number; // Reference to parent objective
-  equipe?: string; // For department level objectives
+export interface User {
+  uid: string;
+  email: string;
+  role?: 'admin' | 'member' | 'moderator';
+  status?: 'active' | 'inactive' | 'suspended';
+  membre?: Membre | null;
+  createdAt?: string;
+  updatedAt?: string;
 }
 
 export interface KPI {
@@ -29,4 +29,40 @@ export interface KPI {
   unite: string;
   tendance: 'hausse' | 'baisse' | 'stable';
   categorie: string;
+}
+
+export type ObjectiveLevel = 'company' | 'department' | 'individual';
+export type ObjectiveStatus = 'en_cours' | 'complete' | 'en_retard';
+
+export interface KeyResult {
+  id: number;
+  title: string;
+  target: number;
+  current: number;
+  unit: string;
+  dueDate: string;
+}
+
+export interface Objectif {
+  id: string;
+  titre: string;
+  description: string;
+  dateEcheance: string;
+  progression: number;
+  responsable: string;
+  statut: ObjectiveStatus;
+  level: ObjectiveLevel;
+  parentId?: string;
+  departmentId?: string;
+  keyResults: KeyResult[];
+  createdAt: string;
+  updatedAt: string;
+  children?: Objectif[];
+}
+
+export interface AuthUser {
+  uid: string;
+  email: string;
+  role?: 'admin' | 'member' | 'moderator';
+  membre?: Membre | null;
 }

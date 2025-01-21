@@ -1,94 +1,105 @@
-import { Membre, Objectif, KPI } from './types';
+import { Membre, Objectif, KPI, KeyResult } from './types';
 
 export const membres: Membre[] = [
   {
     id: 1,
     nom: 'Oluwaseun Adebayo',
     poste: 'Directeur Général',
-    photo: 'https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d',
-    equipe: 'Direction'
+    photo: 'https://ignite-power.com/wp-content/uploads/2024/03/ignite-logo.png',
+    equipe: 'Direction',
+    email: 'oluwaseun.adebayo@oolu.energy'
   },
   {
     id: 2,
     nom: 'Chioma Okonkwo',
     poste: 'Directrice Marketing',
-    photo: 'https://images.unsplash.com/photo-1531123897727-8f129e1688ce',
-    equipe: 'Marketing'
+    photo: 'https://ignite-power.com/wp-content/uploads/2024/03/ignite-logo.png',
+    equipe: 'Marketing',
+    email: 'chioma.okonkwo@oolu.energy'
   },
   {
     id: 3,
     nom: 'Babajide Ogunleye',
     poste: 'Chef de Projet',
-    photo: 'https://images.unsplash.com/photo-1500648767791-00dcc994a43e',
-    equipe: 'Développement'
+    photo: 'https://ignite-power.com/wp-content/uploads/2024/03/ignite-logo.png',
+    equipe: 'Développement',
+    email: 'babajide.ogunleye@oolu.energy'
   },
   {
     id: 4,
     nom: 'Aisha Mohammed',
     poste: 'Responsable RH',
-    photo: 'https://images.unsplash.com/photo-1494790108377-be9c29b29330',
-    equipe: 'Ressources Humaines'
+    photo: 'https://ignite-power.com/wp-content/uploads/2024/03/ignite-logo.png',
+    equipe: 'Ressources Humaines',
+    email: 'aisha.mohammed@oolu.energy'
   },
   {
     id: 5,
     nom: 'Emmanuel Nwachukwu',
     poste: 'Lead Developer',
-    photo: 'https://images.unsplash.com/photo-1519345182560-3f2917c472ef',
-    equipe: 'Développement'
+    photo: 'https://ignite-power.com/wp-content/uploads/2024/03/ignite-logo.png',
+    equipe: 'Développement',
+    email: 'emmanuel.nwachukwu@oolu.energy'
   },
   {
     id: 6,
     nom: 'Folake Adeleke',
     poste: 'Designer UI/UX',
-    photo: 'https://images.unsplash.com/photo-1438761681033-6461ffad8d80',
-    equipe: 'Design'
+    photo: 'https://ignite-power.com/wp-content/uploads/2024/03/ignite-logo.png',
+    equipe: 'Design',
+    email: 'folake.adeleke@oolu.energy'
   },
   {
     id: 7,
     nom: 'Taiwo Olayinka',
     poste: 'Analyste Financier',
-    photo: 'https://images.unsplash.com/photo-1472099645785-5658abf4ff4e',
-    equipe: 'Finance'
+    photo: 'https://ignite-power.com/wp-content/uploads/2024/03/ignite-logo.png',
+    equipe: 'Finance',
+    email: 'taiwo.olayinka@oolu.energy'
   },
   {
     id: 8,
     nom: 'Ngozi Eze',
     poste: 'Responsable Commercial',
-    photo: 'https://images.unsplash.com/photo-1573497019940-1c28c88b4f3e',
-    equipe: 'Commercial'
+    photo: 'https://ignite-power.com/wp-content/uploads/2024/03/ignite-logo.png',
+    equipe: 'Commercial',
+    email: 'ngozi.eze@oolu.energy'
   },
   {
     id: 9,
     nom: 'Yusuf Ibrahim',
     poste: 'Développeur Backend',
-    photo: 'https://images.unsplash.com/photo-1506794778202-cad84cf45f1d',
-    equipe: 'Développement'
+    photo: 'https://ignite-power.com/wp-content/uploads/2024/03/ignite-logo.png',
+    equipe: 'Développement',
+    email: 'yusuf.ibrahim@oolu.energy'
   },
   {
     id: 10,
     nom: 'Blessing Okafor',
     poste: 'Content Manager',
-    photo: 'https://images.unsplash.com/photo-1534528741775-53994a69daeb',
-    equipe: 'Marketing'
+    photo: 'https://ignite-power.com/wp-content/uploads/2024/03/ignite-logo.png',
+    equipe: 'Marketing',
+    email: 'blessing.okafor@oolu.energy'
   },
   {
     id: 11,
     nom: 'Olayinka Adeniyi',
     poste: 'Data Analyst',
-    photo: 'https://images.unsplash.com/photo-1544005313-94ddf0286df2',
-    equipe: 'Data'
+    photo: 'https://ignite-power.com/wp-content/uploads/2024/03/ignite-logo.png',
+    equipe: 'Data',
+    email: 'olayinka.adeniyi@oolu.energy'
   },
   {
     id: 12,
     nom: 'Chidi Aneke',
     poste: 'DevOps Engineer',
-    photo: 'https://images.unsplash.com/photo-1519345182560-3f2917c472ef',
-    equipe: 'Développement'
+    photo: 'https://ignite-power.com/wp-content/uploads/2024/03/ignite-logo.png',
+    equipe: 'Développement',
+    email: 'chidi.aneke@oolu.energy'
   }
 ];
 
 export const objectifs: Objectif[] = [
-  // Company Level Objectives
   {
     id: 1,
     titre: 'Expansion Lagos Tech Hub',
@@ -97,7 +108,25 @@ export const objectifs: Objectif[] = [
     progression: 65,
     responsable: 1,
     statut: 'en_cours',
-    level: 'company'
+    level: 'company',
+    keyResults: [
+      {
+        id: 1,
+        title: 'Nouveaux partenariats tech',
+        target: 20,
+        current: 12,
+        unit: 'partenaires',
+        dueDate: '2024-06-30'
+      },
+      {
+        id: 2,
+        title: 'Surface de bureaux',
+        target: 5000,
+        current: 3200,
+        unit: 'm²',
+        dueDate: '2024-05-15'
+      }
+    ]
   },
   {
     id: 2,
@@ -107,57 +136,61 @@ export const objectifs: Objectif[] = [
     progression: 85,
     responsable: 3,
     statut: 'en_cours',
-    level: 'company'
+    level: 'department',
+    parentId: 1,
+    departmentId: 'DEV',
+    keyResults: [
+      {
+        id: 3,
+        title: 'Développeurs formés',
+        target: 500,
+        current: 425,
+        unit: 'personnes',
+        dueDate: '2024-03-31'
+      }
+    ]
   },
-  // Department Level Objectives (Marketing)
   {
     id: 3,
-    titre: 'Stratégie Marketing Digital',
-    description: 'Développer une stratégie marketing digital complète',
+    titre: 'Digitalisation PME',
+    description: 'Accompagner 100 PME dans leur transformation digitale',
     dateEcheance: '2024-04-15',
-    progression: 70,
+    progression: 100,
     responsable: 2,
-    statut: 'en_cours',
+    statut: 'complete',
     level: 'department',
-    parentId: 1,
-    equipe: 'Marketing'
+    departmentId: 'MKT',
+    keyResults: [
+      {
+        id: 4,
+        title: 'PME accompagnées',
+        target: 100,
+        current: 100,
+        unit: 'entreprises',
+        dueDate: '2024-04-15'
+      }
+    ]
   },
-  // Individual Level Objectives
   {
     id: 4,
-    titre: 'Campagne Réseaux Sociaux',
-    description: 'Créer et exécuter une campagne sur les réseaux sociaux',
-    dateEcheance: '2024-03-30',
-    progression: 60,
-    responsable: 10,
-    statut: 'en_cours',
-    level: 'individual',
-    parentId: 3
-  },
-  // Department Level Objectives (Development)
-  {
-    id: 5,
-    titre: 'Infrastructure Tech Hub',
-    description: 'Mettre en place l\'infrastructure technique du hub',
-    dateEcheance: '2024-05-30',
+    titre: 'Innovation FinTech',
+    description: 'Lancer notre solution de paiement mobile',
+    dateEcheance: '2024-08-30',
     progression: 40,
-    responsable: 5,
-    statut: 'en_cours',
-    level: 'department',
-    parentId: 1,
-    equipe: 'Développement'
-  },
-  // Individual Level Objectives
-  {
-    id: 6,
-    titre: 'Architecture Cloud',
-    description: 'Concevoir l\'architecture cloud pour le hub',
-    dateEcheance: '2024-04-30',
-    progression: 35,
-    responsable: 12,
+    responsable: 7,
     statut: 'en_cours',
     level: 'individual',
-    parentId: 5
+    parentId: 2,
+    keyResults: [
+      {
+        id: 5,
+        title: 'Transactions test',
+        target: 10000,
+        current: 3500,
+        unit: 'transactions',
+        dueDate: '2024-08-15'
+      }
+    ]
   }
 ];
 

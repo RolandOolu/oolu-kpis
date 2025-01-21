@@ -1,13 +1,28 @@
-import React from 'react';
-import { LayoutDashboard, Users, Target, TrendingUp, Settings, Menu } from 'lucide-react';
+import React, { useState } from 'react';
+import { LayoutDashboard, Users, Target, TrendingUp, Settings, Menu, LogOut, UserCog } from 'lucide-react';
+import { signOut } from '../lib/auth';
+import ProfileModal from './Profile';
+import { useAuth } from '../contexts/AuthContext';
 
-const menuItems = [
-  { id: 'dashboard', icon: LayoutDashboard, label: 'Tableau de Bord' },
-  { id: 'team', icon: Users, label: 'Équipe' },
-  { id: 'objectives', icon: Target, label: 'Objectifs' },
-  { id: 'kpis', icon: TrendingUp, label: 'KPIs' },
-  { id: 'settings', icon: Settings, label: 'Paramètres' }
-];
+const getMenuItems = (isAdmin: boolean) => {
+  const baseItems = [
+    { id: 'dashboard', icon: LayoutDashboard, label: 'Tableau de Bord' },
+    { id: 'team', icon: Users, label: 'Équipe' },
+    { id: 'objectives', icon: Target, label: 'Objectifs' },
+    { id: 'kpis', icon: TrendingUp, label: 'KPIs' },
+  ];
+
+  if (isAdmin) {
+    baseItems.push(
+      { id: 'users', icon: UserCog, label: 'Gestion Utilisateurs' },
+      { id: 'settings', icon: Settings, label: 'Paramètres' }
+    );
+  } else {
+    baseItems.push({ id: 'settings', icon: Settings, label: 'Paramètres' });
+  }
+
+  return baseItems;
+};
 
 interface SidebarProps {
   activeModule: string;
@@ -15,7 +30,19 @@ interface SidebarProps {
 }
 
 export default function Sidebar({ activeModule, onModuleChange }: SidebarProps) {
-  const [isOpen, setIsOpen] = React.useState(true);
+  const [isOpen, setIsOpen] = useState(true);
+  const [showProfileModal, setShowProfileModal] = useState(false);
+  const { user } = useAuth();
+  const isAdmin = user?.role === 'admin';
+  const menuItems = getMenuItems(isAdmin);
+
+  const handleSignOut = async () => {
+    try {
+      await signOut();
+    } catch (error) {
+      console.error('Error signing out:', error);
+    }
+  };
 
   return (
     <>
@@ -35,8 +62,8 @@ export default function Sidebar({ activeModule, onModuleChange }: SidebarProps) 
         <div className="flex flex-col h-full">
           <div className="p-6 border-b border-gray-200">
             <img 
-              src="https://nigeria.oolu.energy/wp-content/uploads/2024/11/output-onlinepngtools.png"
-              alt="Oolu Logo"
+              src="https://ignite-power.com/wp-content/uploads/2024/03/ignite-logo.png"
+              alt="Logo"
               className="h-12 w-auto"
             />
           </div>
@@ -64,21 +91,39 @@ export default function Sidebar({ activeModule, onModuleChange }: SidebarProps) 
             </ul>
           </nav>
 
-          <div className="p-6 border-t border-gray-200">
-            <div className="flex items-center space-x-3">
+          <div className="p-4 border-t border-gray-200">
+            <button
+              onClick={() => setShowProfileModal(true)}
+              className="w-full flex items-center space-x-3 p-3 rounded-lg hover:bg-gray-100 transition-colors"
+            >
               <img
-                src="https://images.unsplash.com/photo-1472099645785-5658abf4ff4e"
+                src={user?.membre?.photo || "https://ignite-power.com/wp-content/uploads/2024/03/ignite-logo.png"}
                 alt="Profile"
                 className="w-10 h-10 rounded-full"
               />
               <div className={`${isOpen ? 'opacity-100' : 'lg:opacity-100 opacity-0'}`}>
-                <p className="font-medium text-gray-900">Thomas Bernard</p>
-                <p className="text-sm text-gray-500">Admin</p>
+                <p className="font-medium text-gray-900">{user?.membre?.nom || 'Utilisateur'}</p>
+                <p className="text-sm text-gray-500">{user?.membre?.poste || 'Mon profil'}</p>
               </div>
-            </div>
+            </button>
+
+            <button
+              onClick={handleSignOut}
+              className="mt-2 w-full flex items-center space-x-3 p-3 rounded-lg text-red-600 hover:bg-red-50 transition-colors"
+            >
+              <LogOut size={20} />
+              <span className={`${isOpen ? 'opacity-100' : 'lg:opacity-100 opacity-0'}`}>
+                Déconnexion
+              </span>
+            </button>
           </div>
         </div>
       </div>
+
+      <ProfileModal
+        isOpen={showProfileModal}
+        onClose={() => setShowProfileModal(false)}
+      />
     </>
   );
 }
