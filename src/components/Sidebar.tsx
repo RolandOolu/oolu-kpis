@@ -1,129 +1,188 @@
-import React, { useState } from 'react';
-import { LayoutDashboard, Users, Target, TrendingUp, Settings, Menu, LogOut, UserCog } from 'lucide-react';
-import { signOut } from '../lib/auth';
-import ProfileModal from './Profile';
+import React from 'react';
+import { useNavigate, useLocation } from 'react-router-dom';
+import { 
+  Home, 
+  Target, 
+  PieChart, 
+  Users, 
+  Briefcase, 
+  Settings, 
+  Menu, 
+  X,
+  BarChart3,
+  FileText,
+  Bell,
+  Shield,
+  Building2,
+  Calendar,
+  MessageSquare,
+  HelpCircle,
+  FileCode,
+  Database,
+  UserCog,
+  Book,
+  Link2,
+  LogOut,
+  User
+} from 'lucide-react';
 import { useAuth } from '../contexts/AuthContext';
 
-const getMenuItems = (isAdmin: boolean) => {
-  const baseItems = [
-    { id: 'dashboard', icon: LayoutDashboard, label: 'Tableau de Bord' },
-    { id: 'team', icon: Users, label: 'Équipe' },
-    { id: 'objectives', icon: Target, label: 'Objectifs' },
-    { id: 'kpis', icon: TrendingUp, label: 'KPIs' },
-  ];
-
-  if (isAdmin) {
-    baseItems.push(
-      { id: 'users', icon: UserCog, label: 'Gestion Utilisateurs' },
-      { id: 'settings', icon: Settings, label: 'Paramètres' }
-    );
-  } else {
-    baseItems.push({ id: 'settings', icon: Settings, label: 'Paramètres' });
-  }
-
-  return baseItems;
-};
-
 interface SidebarProps {
-  activeModule: string;
-  onModuleChange: (module: string) => void;
+  sidebarOpen: boolean;
+  setSidebarOpen: (open: boolean) => void;
 }
 
-export default function Sidebar({ activeModule, onModuleChange }: SidebarProps) {
-  const [isOpen, setIsOpen] = useState(true);
-  const [showProfileModal, setShowProfileModal] = useState(false);
-  const { user } = useAuth();
-  const isAdmin = user?.role === 'admin';
-  const menuItems = getMenuItems(isAdmin);
+interface MenuItem {
+  icon: React.ReactNode;
+  label: string;
+  path: string;
+  adminOnly?: boolean;
+}
 
-  const handleSignOut = async () => {
+export default function Sidebar({ sidebarOpen, setSidebarOpen }: SidebarProps) {
+  const navigate = useNavigate();
+  const location = useLocation();
+  const { user, logout } = useAuth();
+
+  const menuItems: MenuItem[] = [
+    // Main Menu
+    { icon: <Home />, label: 'Dashboard', path: '/' },
+    { icon: <Target />, label: 'Objectives', path: '/objectives' },
+    { icon: <PieChart />, label: 'KPIs', path: '/kpis' },
+    { icon: <Users />, label: 'Team', path: '/team' },
+    { icon: <Briefcase />, label: 'Projects', path: '/projects' },
+    { icon: <Book />, label: 'Documentation', path: '/documentation' },
+    { icon: <Bell />, label: 'Notifications', path: '/notifications' },
+    
+    // Admin Only Menus
+    { icon: <UserCog />, label: 'User Management', path: '/users', adminOnly: true },
+    { icon: <BarChart3 />, label: 'Analytics', path: '/analytics', adminOnly: true },
+    { icon: <FileText />, label: 'Reports', path: '/reports', adminOnly: true },
+    { icon: <Shield />, label: 'Security', path: '/security', adminOnly: true },
+    { icon: <Building2 />, label: 'Departments', path: '/departments', adminOnly: true },
+    { icon: <Calendar />, label: 'Planning', path: '/planning' },
+    { icon: <MessageSquare />, label: 'Messages', path: '/messages' },
+    { icon: <Link2 />, label: 'Integrations', path: '/integrations', adminOnly: true },
+    { icon: <Database />, label: 'API', path: '/api', adminOnly: true },
+    { icon: <FileCode />, label: 'Support', path: '/support' }
+  ];
+
+  const handleNavigation = (path: string) => {
+    navigate(path);
+  };
+
+  const handleLogout = async () => {
     try {
-      await signOut();
+      await logout();
+      navigate('/login');
     } catch (error) {
-      console.error('Error signing out:', error);
+      console.error('Failed to log out:', error);
     }
   };
 
+  const filteredMenuItems = menuItems.filter(item => !item.adminOnly || user?.isAdmin);
+
   return (
-    <>
-      {/* Mobile menu button */}
-      <button
-        onClick={() => setIsOpen(!isOpen)}
-        className="lg:hidden fixed top-4 left-4 z-20 p-2 rounded-md bg-primary text-white"
-      >
-        <Menu size={24} />
-      </button>
-
-      {/* Sidebar */}
-      <div className={`
-        fixed top-0 left-0 h-full bg-white border-r border-gray-200 transition-all duration-300 ease-in-out z-10
-        ${isOpen ? 'w-64' : 'w-0 lg:w-64'} 
-      `}>
-        <div className="flex flex-col h-full">
-          <div className="p-6 border-b border-gray-200">
-            <img 
-              src="https://ignite-power.com/wp-content/uploads/2024/03/ignite-logo.png"
-              alt="Logo"
-              className="h-12 w-auto"
-            />
-          </div>
-
-          <nav className="flex-1 pt-4">
-            <ul className="space-y-2 px-4">
-              {menuItems.map((item) => (
-                <li key={item.id}>
-                  <button
-                    onClick={() => onModuleChange(item.id)}
-                    className={`
-                      w-full flex items-center space-x-3 px-4 py-3 rounded-lg transition-colors
-                      ${activeModule === item.id
-                        ? 'bg-primary text-white' 
-                        : 'text-gray-600 hover:bg-primary/10 hover:text-primary'}
-                    `}
-                  >
-                    <item.icon size={20} />
-                    <span className={`${isOpen ? 'opacity-100' : 'lg:opacity-100 opacity-0'}`}>
-                      {item.label}
-                    </span>
-                  </button>
-                </li>
-              ))}
-            </ul>
-          </nav>
-
-          <div className="p-4 border-t border-gray-200">
-            <button
-              onClick={() => setShowProfileModal(true)}
-              className="w-full flex items-center space-x-3 p-3 rounded-lg hover:bg-gray-100 transition-colors"
-            >
-              <img
-                src={user?.membre?.photo || "https://ignite-power.com/wp-content/uploads/2024/03/ignite-logo.png"}
-                alt="Profile"
-                className="w-10 h-10 rounded-full"
-              />
-              <div className={`${isOpen ? 'opacity-100' : 'lg:opacity-100 opacity-0'}`}>
-                <p className="font-medium text-gray-900">{user?.membre?.nom || 'Utilisateur'}</p>
-                <p className="text-sm text-gray-500">{user?.membre?.poste || 'Mon profil'}</p>
-              </div>
-            </button>
-
-            <button
-              onClick={handleSignOut}
-              className="mt-2 w-full flex items-center space-x-3 p-3 rounded-lg text-red-600 hover:bg-red-50 transition-colors"
-            >
-              <LogOut size={20} />
-              <span className={`${isOpen ? 'opacity-100' : 'lg:opacity-100 opacity-0'}`}>
-                Déconnexion
-              </span>
-            </button>
-          </div>
+    <div className={`${sidebarOpen ? 'w-64' : 'w-20'} bg-gray-900 shadow-lg transition-all duration-300 ease-in-out flex flex-col fixed h-full overflow-y-auto`}>
+      <div className="p-4 flex items-center justify-between border-b border-gray-800 sticky top-0 bg-gray-900 z-10">
+        <div className="flex items-center">
+          <img 
+            src="https://ignite-power.com/wp-content/uploads/2024/03/ignite-logo.png" 
+            alt="Ignite Power" 
+            className="h-8 w-8 object-contain bg-white rounded-lg p-1"
+          />
+          {sidebarOpen && <span className="ml-2 text-xl font-semibold text-white">OKRFlow</span>}
         </div>
+        <button 
+          onClick={() => setSidebarOpen(!sidebarOpen)}
+          className="p-1 rounded-lg hover:bg-gray-800 text-gray-400 hover:text-white"
+        >
+          {sidebarOpen ? <X className="h-5 w-5" /> : <Menu className="h-5 w-5" />}
+        </button>
       </div>
 
-      <ProfileModal
-        isOpen={showProfileModal}
-        onClose={() => setShowProfileModal(false)}
-      />
-    </>
+      <nav className="flex-1 pt-4">
+        <div className="space-y-1">
+          {filteredMenuItems.map((item) => (
+            <div
+              key={item.path}
+              onClick={() => handleNavigation(item.path)}
+              className={`
+                flex items-center px-4 py-3 cursor-pointer
+                ${location.pathname === item.path ? 'bg-primary-600 text-white' : 'text-gray-400 hover:bg-gray-800 hover:text-white'}
+                ${sidebarOpen ? 'justify-start' : 'justify-center'}
+                transition-all duration-200
+              `}
+            >
+              <div className={`${sidebarOpen ? '' : 'w-6'} flex items-center`}>
+                {React.cloneElement(item.icon as React.ReactElement, {
+                  className: `h-5 w-5 ${location.pathname === item.path ? 'text-white' : 'text-current'}`
+                })}
+              </div>
+              {sidebarOpen && (
+                <span className="ml-3 text-sm font-medium truncate">
+                  {item.label}
+                </span>
+              )}
+            </div>
+          ))}
+        </div>
+      </nav>
+
+      {/* User Profile and Settings */}
+      <div className="border-t border-gray-800 p-4">
+        {user && (
+          <div className="space-y-2">
+            {/* Profile Link */}
+            <div
+              onClick={() => handleNavigation('/profile')}
+              className={`
+                flex items-center px-4 py-3 cursor-pointer
+                ${location.pathname === '/profile' ? 'bg-primary-600 text-white' : 'text-gray-400 hover:bg-gray-800 hover:text-white'}
+                rounded-lg transition-all duration-200
+              `}
+            >
+              <User className="h-5 w-5" />
+              {sidebarOpen && (
+                <div className="ml-3">
+                  <p className="text-sm font-medium truncate">
+                    {user.displayName || user.email}
+                  </p>
+                  <p className="text-xs text-gray-500">
+                    {user.role}
+                  </p>
+                </div>
+              )}
+            </div>
+
+            {/* Settings Link */}
+            <div
+              onClick={() => handleNavigation('/settings')}
+              className={`
+                flex items-center px-4 py-3 cursor-pointer
+                ${location.pathname === '/settings' ? 'bg-primary-600 text-white' : 'text-gray-400 hover:bg-gray-800 hover:text-white'}
+                rounded-lg transition-all duration-200
+              `}
+            >
+              <Settings className="h-5 w-5" />
+              {sidebarOpen && (
+                <span className="ml-3 text-sm font-medium">Settings</span>
+              )}
+            </div>
+
+            {/* Logout Button */}
+            <div
+              onClick={handleLogout}
+              className="flex items-center px-4 py-3 cursor-pointer text-gray-400 hover:bg-gray-800 hover:text-white rounded-lg transition-all duration-200"
+            >
+              <LogOut className="h-5 w-5" />
+              {sidebarOpen && (
+                <span className="ml-3 text-sm font-medium">Sign out</span>
+              )}
+            </div>
+          </div>
+        )}
+      </div>
+    </div>
   );
 }
